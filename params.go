@@ -5,12 +5,7 @@ import (
 	"time"
 	"sort"
 	"net/url"
-)
-
-type MethodType string
-
-const (
-	ThemeListGet MethodType = "pdd.ddk.theme.list.get"
+	"encoding/json"
 )
 
 // pdd params
@@ -18,30 +13,32 @@ type Params map[string]interface{}
 
 func NewParams() Params {
 	p := make(Params)
-	p["timestamp"] = strconv.FormatInt(time.Now().Unix(), 10)
 	return p
 }
 
-func NewParamsWithType(_type MethodType) Params {
+func NewParamsWithType(_type MethodType, params ...Params) Params {
 	p := make(Params)
 	p["type"] = _type
 	p["timestamp"] = strconv.FormatInt(time.Now().Unix(), 10)
+	for _, v := range params {
+		p.SetParams(v)
+	}
 	return p
 }
 
-func (p Params) Sign(pdd *Pdd) {
-	p["client_id"] = pdd.Context.ClientId
+func (p Params) Sign(context *Context) {
+	p["client_id"] = context.ClientId
 	// 排序所有的 key
 	var keys []string
 	for key := range p {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
-	signStr := pdd.Context.ClientSecret
+	signStr := context.ClientSecret
 	for _, key := range keys {
 		signStr += key + getString(p[key])
 	}
-	signStr += pdd.Context.ClientSecret
+	signStr += context.ClientSecret
 	p["sign"] = createSign(signStr)
 }
 
@@ -71,6 +68,11 @@ func getString(i interface{}) string {
 		return strconv.Itoa(v)
 	case MethodType:
 		return string(v)
+	case bool:
+		return strconv.FormatBool(v)
+	default:
+		bytes, _ := json.Marshal(v)
+		return string(bytes)
 	}
 	return ""
 }

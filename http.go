@@ -4,11 +4,14 @@ import (
 	"github.com/parnurzeal/gorequest"
 	"sync"
 	"fmt"
+	"log"
 )
 
 const EndPoint = "https://gw-api.pinduoduo.com/api/router"
 
 var clients *sync.Pool
+var Debug bool
+var Retry int
 
 func init() {
 	clients = &sync.Pool{
@@ -16,47 +19,30 @@ func init() {
 			return gorequest.New()
 		},
 	}
+	Retry = 0
 }
 
-func GetStructPost(data interface{}, r interface{}) (err error) {
-	client := clients.Get().(*gorequest.SuperAgent)
-	_, r, errors := client.Post(EndPoint).
-		Type("json").
-		Query(data).
-		EndStruct(r)
-	// return back
-	clients.Put(client)
-	for _, e := range errors {
-		if e != nil {
-			return e
+func Post(query string) (b []byte, err error) {
+	b, err = post(query)
+	if err != nil {
+		times := 0
+		for times < Retry {
+			b, err = post(query)
+			if err != nil {
+				log.Printf("第 %d 次重试失败：%s", times + 1, err)
+			} else {
+				return
+			}
+			times++
 		}
 	}
 	return
 }
 
-func GetStringPost(query string) (s string, err error) {
-	client := clients.Get().(*gorequest.SuperAgent)
-	_, s, errors := client.Post(EndPoint).
-		Type("json").
-		Query(query).
-		End()
-	// push back
-	clients.Put(client)
-	if IsBadPddRequest([]byte(s)) {
-		err = fmt.Errorf("%s", s)
-		return
+func post(query string) (b []byte, err error) {
+	if Debug {
+		log.Println(query)
 	}
-
-	for _, e := range errors {
-		if e != nil {
-			err = e
-			return
-		}
-	}
-	return
-}
-
-func GetBytesPost(query string) (b []byte, err error) {
 	client := clients.Get().(*gorequest.SuperAgent)
 	_, b, errors := client.Post(EndPoint).
 		Type("json").
@@ -68,11 +54,19 @@ func GetBytesPost(query string) (b []byte, err error) {
 		err = fmt.Errorf("%s", b)
 		return
 	}
+	if err = getErrorsError(errors); err != nil {
+		return
+	}
+	return
+}
 
+func getErrorsError(errors []error) (err error) {
+	if len(errors) == 0 {
+		return nil
+	}
 	for _, e := range errors {
 		if e != nil {
-			err = e
-			return
+			err = fmt.Errorf("%s | %s", err, e)
 		}
 	}
 	return

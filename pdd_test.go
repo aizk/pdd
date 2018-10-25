@@ -3,6 +3,7 @@ package pdd
 import (
 	"testing"
 	"fmt"
+	"github.com/liunian1004/pdd/ddk"
 )
 
 func TestNewPdd(t *testing.T) {
@@ -15,9 +16,13 @@ func TestPdd_GetThemeList(t *testing.T) {
 		ClientId: "",
 		ClientSecret: "",
 	})
-	s, err := p.GetThemeList(1, 20)
+	d := ddk.NewDDK(p)
+	s, err := d.ThemeListGet(1, 20)
 	if err != nil {
 		t.Error(err)
 	}
 	t.Logf("%+v", s)
+
+	SetDebug(true)
+	SetRetryTimes(3)
 }
