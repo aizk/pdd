@@ -1,14 +1,15 @@
-package pdd
+package util
 
 import (
 	"github.com/bitly/go-simplejson"
 	"fmt"
+	. "github.com/liunian1004/pdd/context"
 )
 
 // the basic call method
 func Call(context *Context, params Params) (r []byte, err error) {
 	params.Sign(context)
-	r, err = Post(params.GetQuery())
+	r, err = Post(context, params.GetQuery())
 	return
 }
 
@@ -21,6 +22,21 @@ func GetResponseBytes(data []byte, keys ...string) (b []byte, err error) {
 	for _, key := range keys {
 		js = js.Get(key)
 	}
+	b, err = js.Encode()
+	return
+}
+
+func GetResponseArrayIndexBytes(data []byte, index int, keys ...string) (b []byte, err error) {
+	js, err := simplejson.NewJson(data)
+	if err != nil {
+		return
+	}
+	for _, key := range keys {
+		js = js.Get(key)
+	}
+
+	js = js.GetIndex(index)
+
 	b, err = js.Encode()
 	return
 }
@@ -42,13 +58,4 @@ func TransformPids(pids []string) (r string) {
 	}
 	r += `"]`
 	return
-}
-
-func SetDebug(d bool) {
-	Debug = d
-}
-
-// 设置请求失败重试次数
-func SetRetryTimes(i int) {
-	Retry = i
 }

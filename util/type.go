@@ -1,4 +1,4 @@
-package pdd
+package util
 
 type MethodType string
 

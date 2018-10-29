@@ -1,17 +1,16 @@
-package pdd
+package util
 
 import (
 	"github.com/parnurzeal/gorequest"
 	"sync"
 	"fmt"
 	"log"
+	. "github.com/liunian1004/pdd/context"
 )
 
 const EndPoint = "https://gw-api.pinduoduo.com/api/router"
 
 var clients *sync.Pool
-var Debug bool
-var Retry int
 
 func init() {
 	clients = &sync.Pool{
@@ -19,15 +18,14 @@ func init() {
 			return gorequest.New()
 		},
 	}
-	Retry = 0
 }
 
-func Post(query string) (b []byte, err error) {
-	b, err = post(query)
+func Post(context *Context, query string) (b []byte, err error) {
+	b, err = post(context, query)
 	if err != nil {
 		times := 0
-		for times < Retry {
-			b, err = post(query)
+		for times < context.Retry {
+			b, err = post(context, query)
 			if err != nil {
 				log.Printf("第 %d 次重试失败：%s", times + 1, err)
 			} else {
@@ -39,10 +37,7 @@ func Post(query string) (b []byte, err error) {
 	return
 }
 
-func post(query string) (b []byte, err error) {
-	if Debug {
-		log.Println(query)
-	}
+func post(context *Context, query string) (b []byte, err error) {
 	client := clients.Get().(*gorequest.SuperAgent)
 	_, b, errors := client.Post(EndPoint).
 		Type("json").

@@ -1,14 +1,18 @@
 package pdd
 
+import (
+	. "github.com/liunian1004/pdd/context"
+	"github.com/liunian1004/pdd/ddk"
+)
+
 type Pdd struct {
 	Context *Context
 }
 
-type Config struct {
-	ClientId     string
-	ClientSecret string
-}
-
 func NewPdd(c *Config) *Pdd {
 	return &Pdd{ Context: NewContext(c) }
+}
+
+func (p *Pdd) GetDDK() *ddk.DDK {
+	return ddk.NewDDKWithContext(p.Context)
 }

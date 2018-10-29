@@ -1,4 +1,4 @@
-package pdd
+package util
 
 import (
 	"strconv"
@@ -6,6 +6,7 @@ import (
 	"sort"
 	"net/url"
 	"encoding/json"
+	. "github.com/liunian1004/pdd/context"
 )
 
 // pdd params

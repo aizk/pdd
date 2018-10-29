@@ -3,16 +3,18 @@ package ddk
 import (
 	"encoding/json"
 	"fmt"
-	. "github.com/liunian1004/pdd"
+	//. "github.com/liunian1004/pdd"
+	. "github.com/liunian1004/pdd/context"
+	. "github.com/liunian1004/pdd/util"
 )
 
 type DDK struct {
 	Context *Context
 }
 
-func NewDDK(p *Pdd) *DDK {
-	return &DDK{Context: p.Context}
-}
+//func NewDDK(p *Pdd) *DDK {
+//	return &DDK{Context: p.Context}
+//}
 
 func NewDDKWithContext(c *Context) *DDK {
 	return &DDK{Context: c}
@@ -108,26 +110,83 @@ type GoodsListResponse struct {
 }
 
 type Goods struct {
+	CreateAt             int      `json:"create_at"`
+	GoodsId              int      `json:"goods_id"`
+	GoodsName            string   `json:"goods_name"`
+	GoodsDesc            string   `json:"goods_desc"`
+	GoodsThumbnailUrl    string   `json:"goods_thumbnail_url"`
+	GoodsImageUrl        string   `json:"goods_image_url"`
+	GoodsGalleryUrls     []string `json:"goods_gallery_urls"`
+	SoldQuantity         int      `json:"sold_quantity"`
+	MinGroupPrice        int      `json:"min_group_price"`
+	MinNormalPrice       int      `json:"min_normal_price"`
+	MallId               int      `json:"mall_id"`
+	MallName             string   `json:"mall_name"`
+	MerchantType         int      `json:"merchant_type"`
+	MallCps              int      `json:"mall_cps"`
+	CategoryId           int      `json:"category_id"`
+	CategoryName         string   `json:"category_name"`
+	OptId                int      `json:"opt_id"`
+	OptName              string   `json:"opt_name"`
+	OptIds               []int    `json:"opt_ids"`
+	CatIds               []int    `json:"cat_ids"`
+	CatId                int      `json:"cat_id"`
+	HasCoupon            bool     `json:"has_coupon"`
+	CouponMinOrderAmount int      `json:"coupon_min_order_amount"`
+	CouponDiscount       int      `json:"coupon_discount"`
+	CouponTotalQuantity  int      `json:"coupon_total_quantity"`
+	CouponRemainQuantity int      `json:"coupon_remain_quantity"`
+	CouponStartTime      int      `json:"coupon_start_time"`
+	CouponEndTime        int      `json:"coupon_end_time"`
+	PromotionRate        int      `json:"promotion_rate"`
+	GoodsEvalScore       float32  `json:"goods_eval_score"`
+	GoodsEvalCount       int      `json:"goods_eval_count"`
+	AvgDesc              int      `json:"avg_desc"`
+	AvgLgst              int      `json:"avg_lgst"`
+	AvgServ              int      `json:"avg_serv"`
+	DescPct              float32  `json:"desc_pct"`
+	LgstPct              float32  `json:"lgst_pct"`
+	ServPct              float32  `json:"serv_pct"`
+}
+
+func (g *Goods) MarshalGoodsGalleryUrls() string {
+	r, _ := json.Marshal(g.GoodsGalleryUrls)
+	return string(r)
+}
+
+func (g *Goods) MarshalOptIds() string {
+	r, _ := json.Marshal(g.OptIds)
+	return string(r)
+}
+
+func (g *Goods) MarshalCatIds() string {
+	r, _ := json.Marshal(g.CatIds)
+	return string(r)
+}
+
+// GoodsModel for gorm
+type GoodsModel struct {
 	CreateAt             int     `json:"create_at"`
-	GoodsId              int     `json:"goods_id"`
+	GoodsId              int     `json:"goods_id" gorm:"type:bigint;not null;unique"`
 	GoodsName            string  `json:"goods_name"`
-	GoodsDesc            string  `json:"goods_desc"`
+	GoodsDesc            string  `json:"goods_desc" gorm:"type:text"`
 	GoodsThumbnailUrl    string  `json:"goods_thumbnail_url"`
 	GoodsImageUrl        string  `json:"goods_image_url"`
-	GoodsGalleryUrls     string  `json:"goods_gallery_urls"`
+	GoodsGalleryUrls     string  `json:"goods_gallery_urls" gorm:"type:text"`
 	SoldQuantity         int     `json:"sold_quantity"`
 	MinGroupPrice        int     `json:"min_group_price"`
 	MinNormalPrice       int     `json:"min_normal_price"`
+	MallId               int     `json:"mall_id"`
 	MallName             string  `json:"mall_name"`
-	MallCps              string  `json:"mall_cps"`
 	MerchantType         int     `json:"merchant_type"`
+	MallCps              int     `json:"mall_cps"`
 	CategoryId           int     `json:"category_id"`
 	CategoryName         string  `json:"category_name"`
 	OptId                int     `json:"opt_id"`
 	OptName              string  `json:"opt_name"`
-	OptIds               []int   `json:"opt_ids"`
+	OptIds               string  `json:"opt_ids"`
+	CatIds               string  `json:"cat_ids"`
 	CatId                int     `json:"cat_id"`
-	CatIds               []int   `json:"cat_ids"`
 	HasCoupon            bool    `json:"has_coupon"`
 	CouponMinOrderAmount int     `json:"coupon_min_order_amount"`
 	CouponDiscount       int     `json:"coupon_discount"`
@@ -169,7 +228,7 @@ func (d *DDK) GoodsDetail(goodsId int) (res *Goods, err error) {
 	if err != nil {
 		return
 	}
-	bytes, err := GetResponseBytes(r, "goods_detail_response", "goods_details")
+	bytes, err := GetResponseArrayIndexBytes(r, 0, "goods_detail_response", "goods_details")
 	res = new(Goods)
 	err = json.Unmarshal(bytes, res)
 	return
