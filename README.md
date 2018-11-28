@@ -41,7 +41,7 @@ pdd.Debug(true)
 d := NewDDK(p)
 
 params := pdd.NewParams()
-// 设置非必须参数
+// 设置非必传参数
 params.Set("custom_parameters", "test")
 params.Set("generate_short_url", true)
 s, err := d.RPPromUrlGenerate([]string{"test"}, true, params)

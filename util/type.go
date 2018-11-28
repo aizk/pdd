@@ -12,4 +12,7 @@ const (
 	DDK_GoodsPidQuery             MethodType = "pdd.ddk.goods.pid.query"
 	DDK_GoodsPidGenerate          MethodType = "pdd.ddk.goods.pid.generate"
 	DDK_GoodsPromotionUrlGenerate MethodType = "pdd.ddk.goods.promotion.url.generate"
+
+	// 商品 API
+	GoodsCatsGet MethodType = "pdd.goods.cats.get"
 )

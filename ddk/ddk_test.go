@@ -14,7 +14,7 @@ func TestPdd_GenerateRedPackagePromUrl(t *testing.T) {
 		ClientSecret: "84977a0d640cba853fdf1dfac7736cdc9e2df34f",
 	})
 	d := p.GetDDK()
-	//s, err := d.ThemeListGet(1, 20)
+	//s, err := d.GetThemeList(1, 20)
 	//if err != nil {
 	//	t.Error(err)
 	//}

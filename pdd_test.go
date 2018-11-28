@@ -8,8 +8,8 @@ import (
 
 func TestNewPdd(t *testing.T) {
 	p := NewPdd(&context.Config{
-		ClientId: "bf0a1f05b9884f3fba9e3beeaaf5c8bb",
-		ClientSecret: "84977a0d640cba853fdf1dfac7736cdc9e2df34f",
+		ClientId: "",
+		ClientSecret: "",
 	})
 	d := p.GetDDK()
 	fmt.Println(p, d)
@@ -26,7 +26,7 @@ func TestPdd_GetThemeList(t *testing.T) {
 	//	ClientSecret: "",
 	//})
 	//d := ddk.NewDDK(p)
-	//s, err := d.ThemeListGet(1, 20)
+	//s, err := d.GetThemeList(1, 20)
 	//if err != nil {
 	//	t.Error(err)
 	//}
