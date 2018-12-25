@@ -192,6 +192,7 @@ func (d *DDK) getGoodsByIds(ids []int) (rsp []*Goods,err error) {
 // goods_desc
 // sold_quantity
 func (d *DDK) GoodsDetail(goodsId int) (res *Goods, err error) {
+	res = new(Goods)
 	params := NewParamsWithType(DDK_GoodsDetail)
 	params.Set("goods_id_list", fmt.Sprintf("[%d]", goodsId))
 
@@ -200,7 +201,6 @@ func (d *DDK) GoodsDetail(goodsId int) (res *Goods, err error) {
 		return
 	}
 	bytes, err := GetResponseArrayIndexBytes(r, 0, "goods_detail_response", "goods_details")
-	res = new(Goods)
 	err = json.Unmarshal(bytes, res)
 	return
 }
