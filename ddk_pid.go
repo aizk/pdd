@@ -1,8 +1,7 @@
-package ddk
+package pdd
 
 import (
 	"encoding/json"
-	. "github.com/liunian1004/pdd/util"
 )
 
 type PIdQueryListResponse struct {

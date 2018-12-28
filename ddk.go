@@ -1,13 +1,15 @@
-package ddk
+package pdd
 
 import (
 	"encoding/json"
-	. "github.com/liunian1004/pdd/context"
-	. "github.com/liunian1004/pdd/util"
 )
 
 type DDK struct {
 	Context *Context
+}
+
+func NewDDK(c *Config) *DDK {
+	return &DDK{Context: NewContext(c.ClientId, c.ClientSecret)}
 }
 
 func NewDDKWithContext(c *Context) *DDK {

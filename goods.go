@@ -1,8 +1,6 @@
-package goods
+package pdd
 
 import (
-	. "github.com/liunian1004/pdd/context"
-	. "github.com/liunian1004/pdd/util"
 	"encoding/json"
 )
 

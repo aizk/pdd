@@ -1,9 +1,8 @@
-package util
+package pdd
 
 import (
 	"github.com/bitly/go-simplejson"
 	"fmt"
-	. "github.com/liunian1004/pdd/context"
 )
 
 // the basic call method

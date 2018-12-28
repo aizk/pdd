@@ -1,9 +1,8 @@
-package ddk
+package pdd
 
 import (
 	"encoding/json"
 	"fmt"
-	. "github.com/liunian1004/pdd/util"
 	"github.com/jinzhu/copier"
 )
 
@@ -215,10 +214,10 @@ type GoodsPromotionUrl struct {
 }
 
 // create promotion url
-func (d *DDK) GoodsPromotionUrlGenerate(pId, goodsId string, notMustparams ...Params) (res *GoodsPromotionUrl, err error) {
+func (d *DDK) GoodsPromotionUrlGenerate(pid string, goodsId int, notMustparams ...Params) (res *GoodsPromotionUrl, err error) {
 	params := NewParamsWithType(DDK_GoodsPromotionUrlGenerate, notMustparams...)
-	params.Set("p_id", pId)
-	params.Set("goods_id_list", fmt.Sprintf("[%s]", goodsId))
+	params.Set("p_id", pid)
+	params.Set("goods_id_list", fmt.Sprintf("[%d]", goodsId))
 
 	r, err := Call(d.Context, params)
 	if err != nil {

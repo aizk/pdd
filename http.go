@@ -1,11 +1,11 @@
-package util
+package pdd
 
 import (
 	"github.com/parnurzeal/gorequest"
 	"sync"
 	"fmt"
 	"log"
-	. "github.com/liunian1004/pdd/context"
+	"encoding/json"
 )
 
 const EndPoint = "https://gw-api.pinduoduo.com/api/router"
@@ -46,7 +46,8 @@ func post(context *Context, query string) (b []byte, err error) {
 	// push back
 	clients.Put(client)
 	if IsBadPddRequest(b) {
-		err = fmt.Errorf("%s", b)
+		err = new(Error)
+		json.Unmarshal(b, err)
 		return
 	}
 	if err = getErrorsError(errors); err != nil {

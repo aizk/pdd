@@ -3,11 +3,10 @@ package pdd
 import (
 	"testing"
 	"fmt"
-	"github.com/liunian1004/pdd/context"
 )
 
 func TestNewPdd(t *testing.T) {
-	p := NewPdd(&context.Config{
+	p := NewPdd(&Config{
 		ClientId: "",
 		ClientSecret: "",
 	})

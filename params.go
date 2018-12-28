@@ -1,4 +1,4 @@
-package util
+package pdd
 
 import (
 	"strconv"
@@ -6,7 +6,6 @@ import (
 	"sort"
 	"net/url"
 	"encoding/json"
-	. "github.com/liunian1004/pdd/context"
 )
 
 // pdd params
@@ -65,6 +64,8 @@ func getString(i interface{}) string {
 	switch v := i.(type) {
 	case string:
 		return v
+	case []byte:
+		return string(v)
 	case int:
 		return strconv.Itoa(v)
 	case MethodType:
