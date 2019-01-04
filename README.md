@@ -8,7 +8,6 @@
 
 ```go
 import github.com/liunian1004/pdd
-import github.com/liunian1004/pdd/ddk
 
 p := pdd.NewPdd(&pdd.Config{
     ClientId: "your client id",
