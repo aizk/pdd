@@ -62,7 +62,7 @@ func (d *DDK) PddGoodsOptGet(parentOptID int) (res *GoodsOptList, err error) {
 type GoodsCat struct {
 	Level       int    `json:"level"`         //层级，1-一级，2-二级，3-三级，4-四级
 	ParentCatID int    `json:"parent_cat_id"` //id所属父ID，其中，parent_id=0时为顶级节点
-	OptName     string `json:"cat_name"`      //商品标准类目名
+	CatName     string `json:"cat_name"`      //商品标准类目名
 	CatID       int    `json:"cat_id"`        //商品标准类目ID
 }
 
