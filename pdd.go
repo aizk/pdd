@@ -25,12 +25,6 @@ func (p *Pdd) GetGoodsAPI() *GoodsAPI {
 	return NewGoodsAPIWithContext(p.Context)
 }
 
-//方法列表
-const (
-	PDDpddGoodsOptGet = "pdd.goods.opt.get"  //查询商品标签列表
-	PDDGoodsCatsGet   = "pdd.goods.cats.get" //商品标准类目接口
-)
-
 //GoodsOpt 商品类别
 type GoodsOpt struct {
 	Level       int    `json:"level"`         //层级，1-一级，2-二级，3-三级，4-四级
@@ -46,7 +40,7 @@ type GoodsOptList struct {
 
 //PddGoodsOptGet 查询商品标签列表
 func (d *DDK) PddGoodsOptGet(parentOptID int) (res *GoodsOptList, err error) {
-	params := NewParamsWithType(PDDpddGoodsOptGet)
+	params := NewParamsWithType(GoodsOptGet)
 	params.Set("parent_opt_id", parentOptID)
 	r, err := Call(d.Context, params)
 	if err != nil {
@@ -73,7 +67,7 @@ type GoodsCatsList struct {
 
 //PddGoodsCatGet 查询商品标准类目列表
 func (d *DDK) PddGoodsCatGet(ParentCatID int) (res *GoodsCatsList, err error) {
-	params := NewParamsWithType(PDDGoodsCatsGet)
+	params := NewParamsWithType(GoodsCatsGet)
 	params.Set("parent_cat_id", ParentCatID)
 	r, err := Call(d.Context, params)
 	if err != nil {
