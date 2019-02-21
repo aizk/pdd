@@ -287,3 +287,30 @@ func (d *DDK) TopGoodsListQuery(notMustparams ...Params) (res TopGoodsList, err 
 	err = json.Unmarshal(bytes, &res)
 	return
 }
+
+//GoodsZsURL 多多进宝转链
+type GoodsZsURL struct {
+	URL                      string `json:"url"`                          //单人团推广长链接
+	ShortURL                 string `json:"short_url"`                    //单人团推广短链接
+	MobileURL                string `json:"mobile_url"`                   //推广长链接（唤起拼多多app）
+	MobileShortURL           string `json:"mobile_short_url"`             //推广短链接（可唤起拼多多app）
+	MultiGroupURL            string `json:"multi_group_url"`              //双人团推广长链接
+	MultiGroupShortURL       string `json:"multi_group_short_url"`        //双人团推广短链接
+	MultiGroupMobileURL      string `json:"multi_group_mobile_url"`       //推广长链接（可唤起拼多多app）
+	MultiGroupMobileShortURL string `json:"multi_group_mobile_short_url"` //推广短链接（唤起拼多多app）
+}
+
+//GoodsZsURLGen 多多进宝转链接口
+func (d *DDK) GoodsZsURLGen(sourceURL, pid string) (res GoodsZsURL, err error) {
+	params := NewParamsWithType(DDK_GoodsZsUnitUrlGen)
+	params.Set("source_url", sourceURL)
+	params.Set("pid", pid)
+
+	r, err := Call(d.Context, params)
+	if err != nil {
+		return
+	}
+	bytes, err := GetResponseBytes(r, "goods_zs_unit_generate_response")
+	err = json.Unmarshal(bytes, &res)
+	return
+}
