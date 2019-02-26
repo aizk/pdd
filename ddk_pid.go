@@ -11,7 +11,7 @@ type PIdQueryListResponse struct {
 
 type PIdQuery struct {
 	PId        string `json:"p_id"`
-	CreateTime string `json:"create_time"`
+	CreateTime int64  `json:"create_time"`
 }
 
 // 分页查询生成的推广位信息
@@ -29,7 +29,7 @@ func (d *DDK) GoodsPidQuery(notMustparams ...Params) (res *PIdQueryListResponse,
 }
 
 type PIdGenerateListResponse struct {
-	PIDList    []*PIdGenerate `json:"p_id_list"`
+	PIDList []*PIdGenerate `json:"p_id_list"`
 }
 
 type PIdGenerate struct {
