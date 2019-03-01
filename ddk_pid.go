@@ -11,6 +11,7 @@ type PIdQueryListResponse struct {
 
 type PIdQuery struct {
 	PId        string `json:"p_id"`
+	PName      string `json:"pid_name"`
 	CreateTime int64  `json:"create_time"`
 }
 
