@@ -30,12 +30,12 @@ func (d *DDK) GoodsPidQuery(notMustparams ...Params) (res *PIdQueryListResponse,
 
 type PIdGenerateListResponse struct {
 	PIDList    []*PIdGenerate `json:"p_id_list"`
-	TotalCount int            `json:"total_count"`
 }
 
 type PIdGenerate struct {
-	PId     string `json:"p_id"`
-	PIdName string `json:"p_id_name"`
+	PId        string `json:"p_id"`
+	PIdName    string `json:"pid_name"`
+	CreateTime int64  `json:"create_time"`
 }
 
 // 创建推广位
