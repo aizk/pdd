@@ -56,7 +56,7 @@ s, err := d.RPPromUrlGenerate([]string{"test"}, true, params)
     - [x] `GoodsPidGenerate()` pdd.ddk.goods.pid.generate 创建多多进宝推广位
     - [x] `GoodsPromotionUrlGenerate()` pdd.ddk.goods.promotion.url.generate 多多进宝推广链接生成
     - [x] `RPPromUrlGenerate()` pdd.ddk.rp.prom.url.generate 生成红包推广链接 （**需要对应权限**）
-    - [] pdd.ddk.cms.prom.url.generate 生成商城-频道推广链接
+    - [x] `CMSPromUrlGen()` pdd.ddk.cms.prom.url.generate 生成商城-频道推广链接
     - [x] `ThemeListGet()` pdd.ddk.theme.list.get 多多进宝主题列表查询
     - [] pdd.ddk.theme.goods.search 多多进宝主题商品查询
     - [] pdd.ddk.theme.prom.url.generate 多多进宝主题推广链接生成
@@ -70,7 +70,7 @@ s, err := d.RPPromUrlGenerate([]string{"test"}, true, params)
     - [] pdd.ddk.order.detail.get 查询订单详情
     - [] pdd.ddk.mall.goods.list.get 查询店铺商品
     - [] pdd.ddk.mall.url.gen 多多客生成店铺推广链接 API
-    - [] pdd.ddk.lottery.url.gen 多多客生成转盘抽免单 url （**需要对应权限**）
+    - [x] `LotteryUrlGen()` pdd.ddk.lottery.url.gen 多多客生成转盘抽免单 url （**需要对应权限**）
     - [] pdd.ddk.lottery.new.list.get 多多客查询转盘拉新订单列表
     - [] pdd.ddk.resource.url.gen 生成多多进宝频道推广
     - [] pdd.ddk.merchant.list.get 多多客查店铺列表接口

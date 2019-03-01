@@ -7,14 +7,18 @@ type Pdd struct {
 type Config struct {
 	ClientId     string
 	ClientSecret string
+	RetryTimes   int
+	Debug        bool
 }
 
 func NewPdd(c *Config) *Pdd {
-	return &Pdd{ Context: NewContext(c.ClientId, c.ClientSecret) }
+	return &Pdd{
+		Context: NewContext(c),
+	}
 }
 
 func (p *Pdd) GetDDK() *DDK {
-	return NewDDKWithContext(p.Context)
+	return newDDKWithContext(p.Context)
 }
 
 func (p *Pdd) GetGoodsAPI() *GoodsAPI {

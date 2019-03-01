@@ -21,11 +21,11 @@ func init() {
 }
 
 func Post(context *Context, query string) (b []byte, err error) {
-	b, err = post(context, query)
+	b, err = post(query)
 	if err != nil {
 		times := 0
-		for times < context.Retry {
-			b, err = post(context, query)
+		for times < context.RetryTimes {
+			b, err = post(query)
 			if err != nil {
 				log.Printf("第 %d 次重试失败：%s", times + 1, err)
 			} else {
@@ -37,7 +37,7 @@ func Post(context *Context, query string) (b []byte, err error) {
 	return
 }
 
-func post(context *Context, query string) (b []byte, err error) {
+func post(query string) (b []byte, err error) {
 	client := clients.Get().(*gorequest.SuperAgent)
 	_, b, errors := client.Post(EndPoint).
 		Type("json").

@@ -229,3 +229,29 @@ func (d *DDK) GoodsPromotionUrlGenerate(pid string, goodsId int, notMustparams .
 	res = urls[0]
 	return
 }
+
+type GoodsRecommendGetUrl struct {
+	Url                  string `json:"url"`
+	ShortUrl             string `json:"short_url"`
+	MobileUrl            string `json:"mobile_url"`
+	MobileShortUrl       string `json:"mobile_short_url"`
+	WeAppWebViewUrl      string `json:"we_app_web_view_url"`
+	WeAppWebViewShortUrl string `json:"we_app_web_view_short_url"`
+}
+
+// create promotion url
+func (d *DDK) GoodsRecommendGet(pid string, goodsId int, notMustparams ...Params) (res *GoodsPromotionUrl, err error) {
+	params := NewParamsWithType(DDK_GoodsPromotionUrlGenerate, notMustparams...)
+	params.Set("p_id", pid)
+	params.Set("goods_id_list", fmt.Sprintf("[%d]", goodsId))
+
+	r, err := Call(d.Context, params)
+	if err != nil {
+		return
+	}
+	bytes, err := GetResponseBytes(r, "goods_promotion_url_generate_response", "goods_promotion_url_list")
+	var urls []*GoodsPromotionUrl
+	err = json.Unmarshal(bytes, &urls)
+	res = urls[0]
+	return
+}

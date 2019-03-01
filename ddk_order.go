@@ -35,7 +35,7 @@ type Order struct {
 	AuthDuoId             int    `json:"auth_duo_id"`
 	ZsDuoId               int    `json:"zs_duo_id"`
 	CustomParameters      string `json:"custom_parameters"`
-	Pid                   string `json:"pid"`
+	Pid                   string `json:"pid"` // common use pid
 	PId                   string `json:"p_id"`
 	MatchChannel          int    `json:"match_channel"`
 	DuoCouponAmount       int    `json:"duo_coupon_amount"`
@@ -44,6 +44,8 @@ type Order struct {
 // page_size default 100
 // page default  1
 func (d *DDK) OrderListIncrementGet(startUpdateTime, endUpdateTime int64, notMustparams ...Params) (res *OrderListResponse, err error) {
+	res = new(OrderListResponse)
+
 	params := NewParamsWithType(DDK_OrderListIncrementGet, notMustparams...)
 	params.Set("start_update_time", startUpdateTime)
 	params.Set("end_update_time", endUpdateTime)
@@ -53,9 +55,8 @@ func (d *DDK) OrderListIncrementGet(startUpdateTime, endUpdateTime int64, notMus
 		return
 	}
 	bytes, err := GetResponseBytes(r, "order_list_get_response")
-	res = new(OrderListResponse)
 	err = json.Unmarshal(bytes, res)
-
+	
 	for _, ord := range res.OrderList {
 		if ord.Pid == "" {
 			ord.Pid = ord.PId
@@ -63,6 +64,8 @@ func (d *DDK) OrderListIncrementGet(startUpdateTime, endUpdateTime int64, notMus
 	}
 	return
 }
+
+
 
 func (d *DDK) ColorOrderIncrementGet(startUpdateTime, endUpdateTime int64, notMustparams ...Params) (res *OrderListResponse, err error) {
 	params := NewParamsWithType(DDK_ColorOrderIncrementGet, notMustparams...)
