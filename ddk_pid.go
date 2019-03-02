@@ -5,11 +5,11 @@ import (
 )
 
 type PidQueryListResponse struct {
-	PIDList    []*PIdQuery `json:"p_id_list"`
+	PIDList    []*PidQuery `json:"p_id_list"`
 	TotalCount int         `json:"total_count"`
 }
 
-type PIdQuery struct {
+type PidQuery struct {
 	PId        string `json:"p_id"`
 	PName      string `json:"pid_name"`
 	CreateTime int64  `json:"create_time"`

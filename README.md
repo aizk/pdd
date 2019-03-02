@@ -12,25 +12,25 @@ import github.com/liunian1004/pdd
 p := pdd.NewPdd(&pdd.Config{
     ClientId: "your client id",
     ClientSecret: "your client secret",
+    RetryTimes: 3, // 设置接口调用失败重试次数
 })
 
 // 初始化多多客相关 API 调用
-d := NewDDK(p)
+d := p.GetDDK()
 
-// or
+// 或者
+
 d := ddk.NewDDK(&pdd.Config{
     ClientId: "your client id",
     ClientSecret: "your client secret",
+    RetryTimes: 3, // 设置接口调用失败重试次数
 })
 
 // 获取主题列表
 r, err := d.ThemeListGet(1, 20)
 
-// 设置接口调用失败重试次数
-pdd.SetRetryTimes(3)
-
-// 开启 Debug 模式
-pdd.Debug(true)
+// 初始化商品 API
+g := p.GetGoodsAPI()
 ```
 ## 非必须参数
 
@@ -43,7 +43,7 @@ params := pdd.NewParams()
 // 设置非必传参数
 params.Set("custom_parameters", "test")
 params.Set("generate_short_url", true)
-s, err := d.RPPromUrlGenerate([]string{"test"}, true, params)
+s, err := d.RPPromUrlGenerate([]string{"pid"}, true, params)
 ```
 
 ## Todo
@@ -55,6 +55,7 @@ s, err := d.RPPromUrlGenerate([]string{"test"}, true, params)
     - [x] `GoodsPidQuery()` pdd.ddk.goods.pid.query 查询已经生成的推广位信息
     - [x] `GoodsPidGenerate()` pdd.ddk.goods.pid.generate 创建多多进宝推广位
     - [x] `GoodsPromotionUrlGenerate()` pdd.ddk.goods.promotion.url.generate 多多进宝推广链接生成
+    - [x] `TopGoodsListQuery()` pdd.ddk.top.goods.list.query 获取热销商品列表
     - [x] `RPPromUrlGenerate()` pdd.ddk.rp.prom.url.generate 生成红包推广链接 （**需要对应权限**）
     - [x] `CMSPromUrlGen()` pdd.ddk.cms.prom.url.generate 生成商城-频道推广链接
     - [x] `ThemeListGet()` pdd.ddk.theme.list.get 多多进宝主题列表查询
@@ -62,7 +63,7 @@ s, err := d.RPPromUrlGenerate([]string{"test"}, true, params)
     - [] pdd.ddk.theme.prom.url.generate 多多进宝主题推广链接生成
     - [] pdd.ddk.app.new.bill.list.get 多多客拉新账单
     - [] pdd.ddk.direct.goods.query 定向推广商品查询接口
-    - [] pdd.ddk.goods.zs.unit.url.gen 多多进宝转链接口
+    - [x] `GoodsZsURLGen()` pdd.ddk.goods.zs.unit.url.gen 多多进宝转链接口
     - [] pdd.ddk.zs.unit.goods.query 查询招商推广计划商品
     - [] pdd.ddk.weapp.qrcode.url.gen 多多客生成单品推广小程序二维码 url
     - [] pdd.ddk.goods.basic.info.get 获取商品基本信息接口
@@ -74,6 +75,9 @@ s, err := d.RPPromUrlGenerate([]string{"test"}, true, params)
     - [] pdd.ddk.lottery.new.list.get 多多客查询转盘拉新订单列表
     - [] pdd.ddk.resource.url.gen 生成多多进宝频道推广
     - [] pdd.ddk.merchant.list.get 多多客查店铺列表接口
+- 商品 API
+    - [x] `GoodsCatGet()` pdd.goods.cats.get 拼多多标准商品类目信息
+    - [x] `GoodsOptGet()` pdd.goods.opt.get 拼多多商品标签列表
 
 ## 多多客工具 API
 

@@ -6,7 +6,7 @@ import (
 )
 
 func TestGoodsAPI_GoodsCatGet(t *testing.T) {
-	g := NewGoodsAPIWithContext(&Context{
+	g := newGoodsAPIWithContext(&Context{
 		ClientId: ClientId,
 		ClientSecret: ClientSecret,
 	})
