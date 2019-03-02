@@ -4,18 +4,19 @@ import (
 	"encoding/json"
 )
 
-type PIdQueryListResponse struct {
+type PidQueryListResponse struct {
 	PIDList    []*PIdQuery `json:"p_id_list"`
 	TotalCount int         `json:"total_count"`
 }
 
 type PIdQuery struct {
 	PId        string `json:"p_id"`
-	CreateTime string `json:"create_time"`
+	PName      string `json:"pid_name"`
+	CreateTime int64  `json:"create_time"`
 }
 
 // 分页查询生成的推广位信息
-func (d *DDK) GoodsPidQuery(notMustparams ...Params) (res *PIdQueryListResponse, err error) {
+func (d *DDK) GoodsPidQuery(notMustparams ...Params) (res *PidQueryListResponse, err error) {
 	params := NewParamsWithType(DDK_GoodsPidQuery, notMustparams...)
 
 	r, err := Call(d.Context, params)
@@ -23,13 +24,13 @@ func (d *DDK) GoodsPidQuery(notMustparams ...Params) (res *PIdQueryListResponse,
 		return
 	}
 	bytes, err := GetResponseBytes(r, "p_id_query_response")
-	res = new(PIdQueryListResponse)
+	res = new(PidQueryListResponse)
 	err = json.Unmarshal(bytes, res)
 	return
 }
 
 type PIdGenerateListResponse struct {
-	PIDList    []*PIdGenerate `json:"p_id_list"`
+	PIDList []*PIdGenerate `json:"p_id_list"`
 }
 
 type PIdGenerate struct {

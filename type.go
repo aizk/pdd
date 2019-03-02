@@ -15,7 +15,10 @@ const (
 	DDK_GoodsPromotionUrlGenerate MethodType = "pdd.ddk.goods.promotion.url.generate"
 	DDK_LotteryUrlGen             MethodType = "pdd.ddk.lottery.url.gen"
 	DDK_CMSPromUrlGenerate        MethodType = "pdd.ddk.cms.prom.url.generate"
+	DDK_TopGoodsListQuery         MethodType = "pdd.ddk.top.goods.list.query"  //多多客获取爆款排行商品接口
+	DDK_GoodsZsUnitUrlGen         MethodType = "pdd.ddk.goods.zs.unit.url.gen" //多多进宝转链接口
 
-	// 商品 API
-	GoodsCatsGet MethodType = "pdd.goods.cats.get"
+	//商品 API
+	GoodsCatsGet MethodType = "pdd.goods.cats.get" //商品标准类目接口
+	GoodsOptGet  MethodType = "pdd.goods.opt.get"  //查询商品标签列表
 )
