@@ -3,6 +3,7 @@ package pdd
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/jinzhu/copier"
 )
 
@@ -13,7 +14,7 @@ type Range struct {
 }
 
 type GoodsListResponse struct {
-	OrderList  []*Goods `json:"goods_list"`
+	GoodsList  []*Goods `json:"goods_list"`
 	TotalCount int      `json:"total_count"`
 }
 
@@ -132,6 +133,7 @@ func GoodsListToGoodsModelList(gs []*Goods) (gms []*GoodsModel) {
 
 // search interface with more params
 func (d *DDK) GoodsSearch(notMustparams ...Params) (res *GoodsListResponse, err error) {
+	res = new(GoodsListResponse)
 	params := NewParamsWithType(DDK_GoodsSearch, notMustparams...)
 
 	r, err := Call(d.Context, params)
@@ -139,7 +141,6 @@ func (d *DDK) GoodsSearch(notMustparams ...Params) (res *GoodsListResponse, err 
 		return
 	}
 	bytes, err := GetResponseBytes(r, "goods_search_response")
-	res = new(GoodsListResponse)
 	err = json.Unmarshal(bytes, res)
 	return
 }
@@ -177,12 +178,12 @@ func (d *DDK) GetExistGoods(ids []int) (res []*Goods, err error) {
 	return
 }
 
-func (d *DDK) getGoodsByIds(ids []int) (rsp []*Goods,err error) {
+func (d *DDK) getGoodsByIds(ids []int) (rsp []*Goods, err error) {
 	idstr, _ := json.Marshal(ids)
 	params := NewParams()
 	params.Set("goods_id_list", string(idstr))
 	r, err := d.GoodsSearch(params)
-	rsp = r.OrderList
+	rsp = r.GoodsList
 	return
 }
 
@@ -244,14 +245,59 @@ func (d *DDK) GoodsRecommendGet(pid string, goodsId int, notMustparams ...Params
 	params := NewParamsWithType(DDK_GoodsPromotionUrlGenerate, notMustparams...)
 	params.Set("p_id", pid)
 	params.Set("goods_id_list", fmt.Sprintf("[%d]", goodsId))
+	bytes, err := GetResponseBytes(r, "goods_promotion_url_generate_response", "goods_promotion_url_list")
+	var urls []*GoodsPromotionUrl
+	err = json.Unmarshal(bytes, &urls)
+	res = urls[0]
+	return
+}
+
+//TopGoodsList 爆款排行商品列表
+type TopGoodsListResponse struct {
+	GoodsList []*Goods `json:"list"`
+	Total     int64    `json:"total"`
+}
+
+// TopGoodsListQuery 多多客获取爆款排行商品接口
+func (d *DDK) TopGoodsListQuery(notMustparams ...Params) (res *TopGoodsListResponse, err error) {
+	res = new(TopGoodsListResponse)
+	params := NewParamsWithType(DDK_TopGoodsListQuery, notMustparams...)
 
 	r, err := Call(d.Context, params)
 	if err != nil {
 		return
 	}
-	bytes, err := GetResponseBytes(r, "goods_promotion_url_generate_response", "goods_promotion_url_list")
-	var urls []*GoodsPromotionUrl
-	err = json.Unmarshal(bytes, &urls)
-	res = urls[0]
+	bytes, err := GetResponseBytes(r, "top_goods_list_get_response")
+	err = json.Unmarshal(bytes, &res)
+	return
+}
+
+// GoodsZsURL 多多进宝转链
+type GoodsZsURL struct {
+	URL                      string `json:"url"`              //单人团推广长链接
+	ShortURL                 string `json:"short_url"`        //单人团推广短链接
+	MobileURL                string `json:"mobile_url"`       //推广长链接（唤起拼多多app）
+	MobileShortURL           string `json:"mobile_short_url"` //推广短链接（可唤起拼多多app）
+	WeAppWebViewUrl          string `json:"we_app_web_view_url"`
+	WeAppWebViewShortUrl     string `json:"we_app_web_view_short_url"`
+	MultiGroupURL            string `json:"multi_group_url"`              //双人团推广长链接
+	MultiGroupShortURL       string `json:"multi_group_short_url"`        //双人团推广短链接
+	MultiGroupMobileURL      string `json:"multi_group_mobile_url"`       //推广长链接（可唤起拼多多app）
+	MultiGroupMobileShortURL string `json:"multi_group_mobile_short_url"` //推广短链接（唤起拼多多app）
+}
+
+//GoodsZsURLGen 多多进宝转链接口
+func (d *DDK) GoodsZsURLGen(sourceURL, pid string) (res GoodsZsURL, err error) {
+	params := NewParamsWithType(DDK_GoodsZsUnitUrlGen)
+	params.Set("source_url", sourceURL)
+	params.Set("pid", pid)
+
+	r, err := Call(d.Context, params)
+	if err != nil {
+		return
+	}
+
+	bytes, err := GetResponseBytes(r, "goods_zs_unit_generate_response")
+	err = json.Unmarshal(bytes, &res)
 	return
 }
