@@ -3,7 +3,6 @@ package pdd
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/jinzhu/copier"
 )
 
@@ -231,34 +230,13 @@ func (d *DDK) GoodsPromotionUrlGenerate(pid string, goodsId int, notMustparams .
 	return
 }
 
-type GoodsRecommendGetUrl struct {
-	Url                  string `json:"url"`
-	ShortUrl             string `json:"short_url"`
-	MobileUrl            string `json:"mobile_url"`
-	MobileShortUrl       string `json:"mobile_short_url"`
-	WeAppWebViewUrl      string `json:"we_app_web_view_url"`
-	WeAppWebViewShortUrl string `json:"we_app_web_view_short_url"`
-}
-
-// create promotion url
-func (d *DDK) GoodsRecommendGet(pid string, goodsId int, notMustparams ...Params) (res *GoodsPromotionUrl, err error) {
-	params := NewParamsWithType(DDK_GoodsPromotionUrlGenerate, notMustparams...)
-	params.Set("p_id", pid)
-	params.Set("goods_id_list", fmt.Sprintf("[%d]", goodsId))
-	bytes, err := GetResponseBytes(r, "goods_promotion_url_generate_response", "goods_promotion_url_list")
-	var urls []*GoodsPromotionUrl
-	err = json.Unmarshal(bytes, &urls)
-	res = urls[0]
-	return
-}
-
-//TopGoodsList 爆款排行商品列表
+// 爆款排行商品列表
 type TopGoodsListResponse struct {
 	GoodsList []*Goods `json:"list"`
 	Total     int64    `json:"total"`
 }
 
-// TopGoodsListQuery 多多客获取爆款排行商品接口
+// 多多客获取爆款排行商品接口
 func (d *DDK) TopGoodsListQuery(notMustparams ...Params) (res *TopGoodsListResponse, err error) {
 	res = new(TopGoodsListResponse)
 	params := NewParamsWithType(DDK_TopGoodsListQuery, notMustparams...)
