@@ -114,6 +114,13 @@ type GoodsModel struct {
 	ServPct              float32 `json:"serv_pct"`
 }
 
+func (m *GoodsModel) SetFields(g *Goods) {
+	copier.Copy(m, g)
+	m.GoodsGalleryUrls = g.MarshalGoodsGalleryUrls()
+	m.OptIds = g.MarshalOptIds()
+	m.CatIds = g.MarshalCatIds()
+}
+
 func GoodsToGoodsModel(g *Goods) (r *GoodsModel) {
 	r = new(GoodsModel)
 	copier.Copy(r, g)
@@ -144,6 +151,49 @@ func (d *DDK) GoodsSearch(notMustparams ...Params) (res *GoodsListResponse, err 
 	return
 }
 
+// 获取指定个数的商品
+func (d *DDK) GoodsSearchWithNumber(number int, params Params) (res []*Goods, err error) {
+	page := 1
+	pageSize := 100
+	if pageSize > number {
+		pageSize = number
+		params["page"] = page
+		params["page_size"] = number
+		r, err1 := d.GoodsSearch(params)
+		if err1 != nil {
+			err = err1
+			return
+		}
+		res = append(res, r.GoodsList...)
+		return
+	}
+
+	for (page * pageSize) < number {
+		params["page"] = page
+		params["page_size"] = pageSize
+		r, err1 := d.GoodsSearch(params)
+		if err1 != nil {
+			err = err1
+			return
+		}
+		res = append(res, r.GoodsList...)
+		page++
+	}
+
+	if number <= (page * pageSize) {
+		params["page"] = page
+		params["page_size"] = number - ((page - 1) * pageSize)
+		r, err1 := d.GoodsSearch(params)
+		if err1 != nil {
+			err = err1
+			return
+		}
+		res = append(res, r.GoodsList...)
+	}
+	return
+}
+
+// 获取未下架的商品
 func (d *DDK) GetExistGoods(ids []int) (res []*Goods, err error) {
 	length := len(ids)
 	start := 0
@@ -173,7 +223,6 @@ func (d *DDK) GetExistGoods(ids []int) (res []*Goods, err error) {
 		return
 	}
 	res = append(res, r...)
-
 	return
 }
 
