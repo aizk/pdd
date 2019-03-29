@@ -69,5 +69,5 @@ func getErrorsError(errors []error) (err error) {
 }
 
 func IsBadPddRequest(body []byte) bool {
-	return string(body[2:16]) == "error_response"
+	return len(body) >= 16 && string(body[2:16]) == "error_response"
 }
