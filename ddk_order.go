@@ -25,6 +25,7 @@ type Order struct {
 	PromotionRate         int    `json:"promotion_rate"`
 	PromotionAmount       int    `json:"promotion_amount"`
 	BatchNo               string `json:"batch_no"`
+	OrderID               string `json:"order_id"`
 	OrderStatus           int    `json:"order_status"`
 	OrderStatusDesc       string `json:"order_status_desc"`
 	VerifyTime            int    `json:"verify_time"`
@@ -56,7 +57,7 @@ func (d *DDK) OrderListIncrementGet(startUpdateTime, endUpdateTime int64, notMus
 	}
 	bytes, err := GetResponseBytes(r, "order_list_get_response")
 	err = json.Unmarshal(bytes, res)
-	
+
 	for _, ord := range res.OrderList {
 		if ord.Pid == "" {
 			ord.Pid = ord.PId
@@ -64,8 +65,6 @@ func (d *DDK) OrderListIncrementGet(startUpdateTime, endUpdateTime int64, notMus
 	}
 	return
 }
-
-
 
 func (d *DDK) ColorOrderIncrementGet(startUpdateTime, endUpdateTime int64, notMustparams ...Params) (res *OrderListResponse, err error) {
 	params := NewParamsWithType(DDK_ColorOrderIncrementGet, notMustparams...)
