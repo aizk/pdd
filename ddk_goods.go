@@ -268,7 +268,7 @@ type GoodsPromotionUrl struct {
 func (d *DDK) GoodsPromotionUrlGenerate(pid string, goodsSign string, notMustparams ...Params) (res *GoodsPromotionUrl, err error) {
 	params := NewParamsWithType(DDK_GoodsPromotionUrlGenerate, notMustparams...)
 	params.Set("p_id", pid)
-	params.Set("goods_id_list", fmt.Sprintf("[\"%s\"]", goodsSign))
+	params.Set("goods_sign_list", fmt.Sprintf("[\"%s\"]", goodsSign))
 
 	r, err := Call(d.Context, params)
 	if err != nil {
