@@ -3,6 +3,7 @@ package pdd
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/jinzhu/copier"
 )
 
@@ -20,6 +21,7 @@ type GoodsListResponse struct {
 type Goods struct {
 	CreateAt             int      `json:"create_at"`               // 创建时间
 	GoodsId              int      `json:"goods_id"`                // 商品id
+	GoodsSign            string   `json:"goods_sign"`              // 商品sign
 	GoodsName            string   `json:"goods_name"`              // 商品名称
 	GoodsDesc            string   `json:"goods_desc"`              // 商品描述
 	GoodsThumbnailUrl    string   `json:"goods_thumbnail_url"`     // 商品缩略图
@@ -263,10 +265,10 @@ type GoodsPromotionUrl struct {
 }
 
 // create promotion url
-func (d *DDK) GoodsPromotionUrlGenerate(pid string, goodsId int, notMustparams ...Params) (res *GoodsPromotionUrl, err error) {
+func (d *DDK) GoodsPromotionUrlGenerate(pid string, goodsSign string, notMustparams ...Params) (res *GoodsPromotionUrl, err error) {
 	params := NewParamsWithType(DDK_GoodsPromotionUrlGenerate, notMustparams...)
 	params.Set("p_id", pid)
-	params.Set("goods_id_list", fmt.Sprintf("[%d]", goodsId))
+	params.Set("goods_sign_list", fmt.Sprintf("[\"%s\"]", goodsSign))
 
 	r, err := Call(d.Context, params)
 	if err != nil {
